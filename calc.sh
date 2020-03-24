@@ -1,4 +1,40 @@
 #! /usr/bin/env bash
+head (){
+  clear
+  headText="Welcome to Bash Calculator v1.0"
+  textLen=${#headText}
+  # textLen=textLen
+
+  for (( i=0; i < $textLen+6; ++i)); do
+    echo -ne "-"
+  done
+
+  echo -ne "\n|"
+  for (( i=0; i < $textLen+4; ++i)); do
+    echo -ne " "
+  done
+  echo -ne "|"
+
+  echo -ne "\n|  "
+  tput setaf 2
+  tput bold
+  echo -ne  $headText
+  tput sgr0
+  echo -ne  "  |\n"
+
+    echo -ne "|"
+  for (( i=0; i < $textLen+4; ++i)); do
+    echo -ne " "
+  done
+  echo -ne "|\n"
+
+  for (( i=0; i < $textLen+6; ++i)); do
+    echo -ne "-"
+  done
+
+  echo -ne "\n\n"
+}
+
 sum (){
   return $(expr $1 + $2)
 }
@@ -12,12 +48,15 @@ multiply(){
 }
 
 divide(){
+  if [[$2 -eq 0]]; then
+    return $("INFINITE")
+  fi
+
   return $(expr $1 / $2)
 }
 
 # When the program is first loaded, display a greeting to the user.
-clear
-echo -e "Welcome to Bash Calculator \n"
+head
 
 while true; do
   # Then, display a menu that outlines the possible operations:
@@ -25,12 +64,15 @@ while true; do
     # Subtract
     # Exit
 
-  echo -e "Please select an operation:\n"
-  echo "(1) Add"
-  echo "(2) Subtract"
-  echo "(3) Multiply"
-  echo "(4) Divide"
-  echo -e "(0) Exit\n"
+  echo -e " Please select an operation:\n"
+  echo "   (1) Add"
+  echo "   (2) Subtract"
+  echo "   (3) Multiply"
+  echo "   (4) Divide"
+  tput setaf 1
+  tput bold
+  echo -e "   (0) Exit\n"
+  tput sgr0
   # Then, capture the user selection.
   printf "Type your selection: "
   read selection
@@ -67,8 +109,11 @@ while true; do
     ;;
 
     *)
-    clear
-    echo " '$selection' is not a valid option\n\n"
+    head
+    tput setaf 1
+    echo -ne " '$selection' is not a valid option!\n\n"
+    tput sgr0
+    continue
     ;;
   esac
 
@@ -82,7 +127,7 @@ while true; do
   $operation $num1 $num2
   result=$?
 
-  clear
+  # head
 
   echo -e "\n   ( $num1 ) $operationSign ( $num2 ) = $result\n\n"
 

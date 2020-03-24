@@ -54,6 +54,7 @@ divide(){
     tput bold
     echo -ne "\n This version of Bash Calculator does not support division by 0 or numbers greater then 255 \n"
     tput sgr0
+    read
   else
     return $(expr $1 / $2)
   fi

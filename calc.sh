@@ -48,16 +48,20 @@ multiply(){
 }
 
 divide(){
-  if [[$2 -eq 0]]; then
-    return $("INFINITE")
+  if [[ $2 -eq 0 ]]; then
+    head
+    tput setaf 3
+    tput bold
+    echo -ne "\n This version of Bash Calculator does not support division by 0 or numbers greater then 255 \n"
+    tput sgr0
+  else
+    return $(expr $1 / $2)
   fi
-
-  return $(expr $1 / $2)
 }
 
 # When the program is first loaded, display a greeting to the user.
 head
-
+# When the operation is complete, redisplay the menu.
 while true; do
   # Then, display a menu that outlines the possible operations:
     # Add
@@ -80,34 +84,35 @@ while true; do
 
   operationSign="none"
   operation=""
-  result="Something went wrong here."
+  declare -i result=0
 
   case $selection in
-    '1' | "Add")
+    '1' | "Add" | "add")
     operationSign="+"
     operation="sum"
     ;;
 
-    '2' | "Subtract")
+    '2' | "Subtract" | "subtract")
     operationSign="-"
     operation="subtract" 
     ;;
 
-    '3' | "Multiply")
+    '3' | "Multiply" | "multiply")
     operationSign="*"
     operation="multiply"
     ;;
 
-    '4' | "Divide")
+    '4' | "Divide" | "divide")
     operationSign="/"
     operation="divide"
     ;;
 
-    '0' | "Exit")
-    echo "Good Bye"
+    '0' | "Exit" | "exit" | "q")
+    echo -ne "\nGood Bye\n"
     exit 0
     ;;
 
+# If the selection does not match a support operation, display an error message.
     *)
     head
     tput setaf 1
@@ -126,15 +131,20 @@ while true; do
 
   $operation $num1 $num2
   result=$?
+  
 
-  # head
+  head
 
-  echo -e "\n   ( $num1 ) $operationSign ( $num2 ) = $result\n\n"
-
+  tput bold
+  tput setaf 4
+  echo -ne "\n   ( $num1 ) $operationSign ( $num2 ) = "
+  tput setaf 7
+  echo -ne "$result\n\n"
+  tput sgr0
   
 
 done
 
 
-# If the selection does not match a support operation, display an error message.
-# When the operation is complete, redisplay the menu.
+
+

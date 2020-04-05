@@ -36,16 +36,15 @@ head (){
 }
 
 sum (){
-  echo $(expr $1 + $2)
-  # return $(expr $1 + $2)
+  return $(expr $1 + $2)
 }
 
 subtract(){
-  echo $(expr $1 - $2)
+  return $(expr $1 - $2)
 }
 
 multiply(){
-  echo $(expr $1 \* $2)
+  return $(expr $1 \* $2)
 }
 
 divide(){
@@ -131,9 +130,8 @@ while true; do
    echo -ne "Second number:  "
   read num2
 
-  # result = $($operation $num1 $num2)
-  result=$($operation $num1 $num2)
-  
+  $operation $num1 $num2
+  result=$?
   
 
   head
